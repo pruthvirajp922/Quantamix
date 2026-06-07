@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Modern Unit Converter</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0b0b0f;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0, transparent 45%),
+                radial-gradient(at 100% 100%, rgba(147, 51, 234, 0.08) 0, transparent 45%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        /* Glassmorphic Minimalist Card Container */
+        .widget-container {
+            background: rgba(20, 20, 25, 0.8);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 36px;
+            width: 100%;
+            max-width: 600px; 
+            color: #f4f4f5;
+            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8), 
+                        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+        }
+
+        /* Custom Dropdown Control Menus - Small Font */
+        select {
+            background-color: #16161a;
+            color: #f4f4f5;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px 18px; 
+            font-size: 15px; 
+            font-weight: 500;
+            cursor: pointer;
+            outline: none;
+            width: 100%;
+            appearance: none;
+            background-image: url("data:image/svg+xml;utf8,<svg fill='%23a1a1aa' height='18' viewBox='0 0 24 24' width='18' xmlns='http://www.w3.org/2000/svg'><path d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        select:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background-color: #1c1c22;
+        }
+
+        select:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
+        select option {
+            background-color: #0f0f12;
+            color: #f4f4f5;
+            padding: 12px;
+        }
+
+        .category-select {
+            margin-bottom: 28px;
+            font-size: 16px; 
+            letter-spacing: -0.1px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Conversion Input Segments Grid Layout */
+        .conversion-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .input-box {
+            flex: 1;
+            background: rgba(30, 30, 35, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-box:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(30, 30, 35, 0.6);
+        }
+
+        .input-box:focus-within {
+            border-color: #3b82f6;
+            background: #121215;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        }
+
+        .input-box input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 32px; /* Smaller, cleaner input number font */
+            font-weight: 600;
+            text-align: center;
+            padding: 20px 14px 6px 14px;
+            outline: none;
+            letter-spacing: -0.5px;
+        }
+
+        /* Hide HTML5 numeric spin buttons cleanly */
+        .input-box input::-webkit-outer-spin-button,
+        .input-box input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .input-box input[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        .input-box select {
+            border: none;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 0;
+            background-color: rgba(15, 15, 18, 0.6);
+            font-size: 13px; 
+            padding: 12px 14px;
+            text-align-last: center;
+            color: #a1a1aa;
+        }
+
+        .input-box:focus-within select {
+            background-color: #0f0f12;
+            border-top-color: rgba(59, 130, 246, 0.2);
+            color: #d4d4d8;
+        }
+
+        .equals-sign {
+            font-size: 28px; 
+            color: #3f3f46;
+            font-weight: 300;
+        }
+
+        /* Premium Interactive Formula Display Element */
+        .formula-section {
+            font-size: 13px; 
+            color: #a1a1aa;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: rgba(255, 255, 255, 0.01);
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            margin-bottom: 28px;
+        }
+
+        .formula-tag {
+            background: linear-gradient(135deg, #fef08a 0%, #eab308 100%);
+            color: #0b0b0f;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #formula-text {
+            color: #d4d4d8;
+            font-weight: 400;
+        }
+
+        /* Modern Author Footer Credit Line - Big Font Focus */
+        .credit-footer {
+            text-align: center;
+            font-size: 24px; /* Increased dramatically for emphasis */
+            color: #e4e4e7;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            padding-top: 24px;
+            margin-top: 8px;
+        }
+
+        .credit-footer span {
+            background: linear-gradient(135deg, #c084fc 0%, #6366f1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        @media (max-width: 560px) {
+            .conversion-row {
+                flex-direction: column;
+                gap: 12px;
+            }
+            .equals-sign {
+                transform: rotate(90deg);
+                margin: -2px 0;
+                font-size: 24px;
+            }
+            .input-box {
+                width: 100%;
+            }
+            .credit-footer {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="widget-container">
+    <select id="category" class="category-select" onchange="setupCategory()">
+        <option value="length">Length</option>
+        <option value="area">Area</option>
+        <option value="dataTransfer">Data Transfer Rate</option>
+        <option value="digitalStorage">Digital Storage</option>
+        <option value="energy">Energy</option>
+        <option value="frequency">Frequency</option>
+        <option value="fuelEconomy">Fuel Economy</option>
+        <option value="mass">Mass</option>
+        <option value="planeAngle">Plane Angle</option>
+        <option value="pressure">Pressure</option>
+        <option value="speed">Speed</option>
+        <option value="temperature">Temperature</option>
+        <option value="time">Time</option>
+        <option value="volume">Volume</option>
+    </select>
+
+    <div class="conversion-row">
+        <div class="input-box">
+            <input type="number" id="inputLeft" value="1" step="any" oninput="performCalculation(true)">
+            <select id="unitLeft" onchange="performCalculation(true)"></select>
+        </div>
+
+        <div class="equals-sign">=</div>
+
+        <div class="input-box">
+            <input type="number" id="inputRight" value="2.54" step="any" oninput="performCalculation(false)">
+            <select id="unitRight" onchange="performCalculation(true)"></select>
+        </div>
+    </div>
+
+    <div class="formula-section">
+        <span class="formula-tag">Formula</span>
+        <span id="formula-text">...</span>
+    </div>
+
+    <div class="credit-footer">
+        Made by <span>Pruthviraj Patil</span>
+    </div>
+</div>
+
+<script>
+    // Universal Structural Multi-Unit Mapping Matrix
+    const conversionData = {
+        length: {
+            units: ["Kilometre", "Metre", "Centimetre", "Millimetre", "Micrometre", "Nanometre", "Mile", "Yard", "Foot", "Inch", "Nautical mile"],
+            base: "Metre",
+            factors: { "Metre": 1, "Kilometre": 1000, "Centimetre": 0.01, "Millimetre": 0.001, "Micrometre": 0.000001, "Nanometre": 0.000000001, "Mile": 1609.344, "Yard": 0.9144, "Foot": 0.3048, "Inch": 0.0254, "Nautical mile": 1852 }
+        },
+        area: {
+            units: ["Square Meter", "Square Kilometer", "Square Mile", "Square Yard", "Square Foot", "Square Inch", "Hectare", "Acre"],
+            base: "Square Meter",
+            factors: { "Square Meter": 1, "Square Kilometer": 1000000, "Square Mile": 2589988.11, "Square Yard": 0.836127, "Square Foot": 0.092903, "Square Inch": 0.00064516, "Hectare": 10000, "Acre": 4046.86 }
+        },
+        dataTransfer: {
+            units: [
+                "Bit per second", "Kilobit per second", "Kilobyte per second", "Kibibit per second", 
+                "Megabit per second", "Megabyte per second", "Mebibit per second", "Gigabit per second", 
+                "Gigabyte per second", "Gibibit per second", "Terabit per second", "Terabyte per second", "Tebibit per second"
+            ],
+            base: "Bit per second",
+            factors: { 
+                "Bit per second": 1, "Kilobit per second": 1000, "Kilobyte per second": 8000, "Kibibit per second": 1024, 
+                "Megabit per second": 1000000, "Megabyte per second": 8000000, "Mebibit per second": 1048576, "Gigabit per second": 1000000000, 
+                "Gigabyte per second": 8000000000, "Gibibit per second": 1073741824, "Terabit per second": 1000000000000, "Terabyte per second": 8000000000000, "Tebibit per second": 1099511627776 
+            }
+        },
+        digitalStorage: {
+            units: [
+                "Bit", "Kilobit", "Kibibit", "Megabit", "Mebibit", "Gigabit", "Gibibit", "Terabit", "Tebibit", "Petabit", "Pebibit",
+                "Byte", "Kilobyte", "Kibibyte", "Megabyte", "Mebibyte", "Gigabyte", "Gibibyte", "Terabyte", "Tebibyte", "Petabyte", "Pebibyte"
+            ],
+            base: "Byte",
+            factors: { 
+                "Bit": 0.125, "Kilobit": 125, "Kibibit": 128, "Megabit": 125000, "Mebibit": 131072, "Gigabit": 125000000, "Gibibit": 134217728, "Terabit": 125000000000, "Tebibit": 137438953472, "Petabit": 125000000000000, "Pebibit": 140737488355328,
+                "Byte": 1, "Kilobyte": 1000, "Kibibyte": 1024, "Megabyte": 1000000, "Mebibyte": 1048576, "Gigabyte": 1000000000, "Gibibyte": 1073741824, "Terabyte": 1000000000000, "Tebibyte": 1099511627776, "Petabyte": 1000000000000000, "Pebibyte": 1125899906842624
+            }
+        },
+        energy: {
+            units: ["Joule", "Kilojoule", "Gram calorie", "Kilocalorie", "Watt hour", "Kilowatt-hour", "Electronvolt", "British thermal unit", "US therm", "Foot-pound"],
+            base: "Joule",
+            factors: { "Joule": 1, "Kilojoule": 1000, "Gram calorie": 4.184, "Kilocalorie": 4184, "Watt hour": 3600, "Kilowatt-hour": 3600000, "Electronvolt": 1.60218e-19, "British thermal unit": 1055.06, "US therm": 1.054804e8, "Foot-pound": 1.35582 }
+        },
+        frequency: {
+            units: ["Hertz", "Kilohertz", "Megahertz", "Gigahertz"],
+            base: "Hertz",
+            factors: { "Hertz": 1, "Kilohertz": 1000, "Megahertz": 1000000, "Gigahertz": 1000000000 }
+        },
+        fuelEconomy: {
+            units: ["Mile per US gallon", "Mile per gallon", "Kilometer per liter", "Litre per 100 kilometres"],
+            base: "Mile per US gallon",
+            special: true
+        },
+        mass: {
+            units: ["Tonne", "Kilogram", "Gram", "Milligram", "Microgram", "Imperial ton", "US ton", "Stone", "Pound", "Ounce"],
+            base: "Gram",
+            factors: { "Tonne": 1000000, "Kilogram": 1000, "Gram": 1, "Milligram": 0.001, "Microgram": 0.000001, "Imperial ton": 1016046.91, "US ton": 907184.74, "Stone": 6350.29, "Pound": 453.59237, "Ounce": 28.349523 }
+        },
+        planeAngle: {
+            units: ["Arcsecond", "Degree", "Gradian", "Milliradian", "Minute of arc", "Radian"],
+            base: "Degree",
+            factors: { "Arcsecond": 1/3600, "Degree": 1, "Gradian": 0.9, "Milliradian": 0.0572958, "Minute of arc": 1/60, "Radian": 57.2958 }
+        },
+        pressure: {
+            units: ["Pascal", "Bar", "PSI", "Atmosphere", "Torr"],
+            base: "Pascal",
+            factors: { "Pascal": 1, "Bar": 100000, "PSI": 6894.76, "Atmosphere": 101325, "Torr": 133.322 }
+        },
+        speed: {
+            units: ["Meter per second", "Kilometer per hour", "Mile per hour", "Knot", "Foot per second"],
+            base: "Meter per second",
+            factors: { "Meter per second": 1, "Kilometer per hour": 0.277778, "Mile per hour": 0.44704, "Knot": 0.514444, "Foot per second": 0.3048 }
+        },
+        temperature: {
+            units: ["Celsius", "Fahrenheit", "Kelvin"],
+            special: true
+        },
+        time: {
+            units: ["Nanosecond", "Microsecond", "Millisecond", "Second", "Minute", "Hour", "Day", "Week", "Month", "Calendar year", "Decade", "Century"],
+            base: "Second",
+            factors: { "Nanosecond": 1e-9, "Microsecond": 1e-6, "Millisecond": 0.001, "Second": 1, "Minute": 60, "Hour": 3600, "Day": 86400, "Week": 604800, "Month": 2628000, "Calendar year": 31536000, "Decade": 315360000, "Century": 3153600000 }
+        },
+        volume: {
+            units: [
+                "US liquid gallon", "US liquid quart", "US liquid pint", "US legal cup", "US fluid ounce", "US tablespoon", "US teaspoon", 
+                "Cubic meter", "Litre", "Milliliter", "Imperial gallon", "Imperial quart", "Imperial pint", "Imperial cup", 
+                "Imperial fluid ounce", "Imperial tablespoon", "Imperial teaspoon", "Cubic foot", "Cubic inch"
+            ],
+            base: "Litre",
+            factors: { 
+                "US liquid gallon": 3.78541, "US liquid quart": 0.946353, "US liquid pint": 0.473176, "US legal cup": 0.24, "US fluid ounce": 0.0295735, "US tablespoon": 0.0147868, "US teaspoon": 0.00492892, 
+                "Cubic meter": 1000, "Litre": 1, "Milliliter": 0.001, "Imperial gallon": 4.54609, "Imperial quart": 1.13652, "Imperial pint": 0.568261, "Imperial cup": 0.284131, 
+                "Imperial fluid ounce": 0.0284131, "Imperial tablespoon": 0.0177582, "Imperial teaspoon": 0.00591939, "Cubic foot": 28.3168, "Cubic inch": 0.0163871
+            }
+        }
+    };
+
+    function setupCategory() {
+        const catKey = document.getElementById('category').value;
+        const config = conversionData[catKey];
+        
+        const leftSelect = document.getElementById('unitLeft');
+        const rightSelect = document.getElementById('unitRight');
+        
+        leftSelect.innerHTML = "";
+        rightSelect.innerHTML = "";
+
+        config.units.forEach((unit, idx) => {
+            let optL = document.createElement('option');
+            optL.value = unit; optL.innerText = unit;
+            leftSelect.appendChild(optL);
+
+            let optR = document.createElement('option');
+            optR.value = unit; optR.innerText = unit;
+            rightSelect.appendChild(optR);
+            
+            if (catKey === "length") {
+                if (unit === "Inch") optL.selected = true;
+                if (unit === "Centimetre") optR.selected = true;
+            } else if (catKey === "time") {
+                if (unit === "Calendar year") optL.selected = true;
+                if (unit === "Nanosecond") optR.selected = true;
+            } else if (catKey === "fuelEconomy") {
+                if (unit === "Kilometer per liter") optL.selected = true;
+                if (unit === "Mile per US gallon") optR.selected = true;
+            } else if (idx === 0) {
+                optL.selected = true;
+            } else if (idx === 1) {
+                optR.selected = true;
+            }
+        });
+
+        document.getElementById('inputLeft').value = 1;
+        performCalculation(true);
+    }
+
+    function performCalculation(isLeftChange) {
+        const catKey = document.getElementById('category').value;
+        const config = conversionData[catKey];
+        
+        const unitL = document.getElementById('unitLeft').value;
+        const unitR = document.getElementById('unitRight').value;
+        
+        const inputL = document.getElementById('inputLeft');
+        const inputRight = document.getElementById('inputRight');
+
+        let sourceVal = isLeftChange ? parseFloat(inputL.value) : parseFloat(inputRight.value);
+        
+        if (isNaN(sourceVal)) {
+            if(isLeftChange) inputRight.value = ""; else inputL.value = "";
+            return;
+        }
+
+        let resultVal;
+
+        if (config.special && catKey === "temperature") {
+            resultVal = convertTemperature(sourceVal, isLeftChange ? unitL : unitR, isLeftChange ? unitR : unitL);
+        } else if (config.special && catKey === "fuelEconomy") {
+            resultVal = convertFuelEconomy(sourceVal, isLeftChange ? unitL : unitR, isLeftChange ? unitR : unitL);
+        } else {
+            let fromUnit = isLeftChange ? unitL : unitR;
+            let toUnit = isLeftChange ? unitR : unitL;
+
+            let valueInBase = sourceVal * config.factors[fromUnit];
+            resultVal = valueInBase / config.factors[toUnit];
+        }
+
+        let cleanResult = Number(resultVal.toPrecision(12)).toString();
+        
+        if (isLeftChange) {
+            inputRight.value = cleanResult;
+        } else {
+            inputL.value = cleanResult;
+        }
+
+        generateFormulaString(unitL, unitR);
+    }
+
+    function convertTemperature(val, from, to) {
+        if (from === to) return val;
+        let celsius;
+        
+        if (from === "Celsius") celsius = val;
+        else if (from === "Fahrenheit") celsius = (val - 32) * 5 / 9;
+        else if (from === "Kelvin") celsius = val - 273.15;
+
+        if (to === "Celsius") return celsius;
+        if (to === "Fahrenheit") return (celsius * 9 / 5) + 32;
+        if (to === "Kelvin") return celsius + 273.15;
+    }
+
+    function convertFuelEconomy(val, from, to) {
+        if (from === to) return val;
+        if (val === 0) return 0;
+        
+        let mpgUS;
+        if (from === "Mile per US gallon") mpgUS = val;
+        else if (from === "Mile per gallon") mpgUS = val * 0.832674;
+        else if (from === "Kilometer per liter") mpgUS = val * 2.35215;
+        else if (from === "Litre per 100 kilometres") mpgUS = 235.215 / val;
+
+        if (to === "Mile per US gallon") return mpgUS;
+        if (to === "Mile per gallon") return mpgUS / 0.832674;
+        if (to === "Kilometer per liter") return mpgUS / 2.35215;
+        if (to === "Litre per 100 kilometres") return 235.215 / mpgUS;
+    }
+
+    function generateFormulaString(unitL, unitR) {
+        const catKey = document.getElementById('category').value;
+        const display = document.getElementById('formula-text');
+
+        if(unitL === unitR) {
+            display.innerText = "Values are identical";
+            return;
+        }
+
+        if(catKey === "temperature" || catKey === "fuelEconomy") {
+            display.innerText = `Standard conversion shifts handle conversion directly.`;
+            return;
+        }
+
+        const factors = conversionData[catKey].factors;
+        let multiplier = factors[unitL] / factors[unitR];
+        let formulaVal = Number(multiplier.toPrecision(7));
+        
+        display.innerText = `multiply the ${catKey === "dataTransfer" ? "data rate" : catKey.toLowerCase()} value by ${formulaVal}`;
+    }
+
+    window.onload = setupCategory;
+</script>
+
+</body>
+</html>
