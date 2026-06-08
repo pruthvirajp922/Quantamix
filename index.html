@@ -15,6 +15,12 @@
 
         body {
             background-color: #0d0e12;
+            /* Added high-tech fine grid texture backdrop */
+            background-image: 
+                linear-gradient(rgba(25, 30, 45, 0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(25, 30, 45, 0.12) 1px, transparent 1px);
+            background-size: 20px 20px;
+            background-position: center;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,40 +30,60 @@
             overflow-x: hidden;
         }
 
-        /* Modern Tech Aura Background Lights mimicking your logo gradient */
-        body::before, body::after {
+        /* Ambient tech light textures layer */
+        body::before, body::after, .bg-glow-layer {
             content: "";
             position: absolute;
-            width: 450px;
-            height: 450px;
             border-radius: 50%;
             mix-blend-mode: screen;
-            filter: blur(90px);
-            opacity: 0.15;
-            z-index: 0;
             pointer-events: none;
+            z-index: 0;
         }
 
+        /* Soft Deep Blue Left Glow */
         body::before {
-            background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
-            top: 15%;
-            left: 15%;
+            width: 500px;
+            height: 500px;
+            filter: blur(120px);
+            opacity: 0.18;
+            background: radial-gradient(circle, #2563eb 0%, transparent 70%);
+            top: 10%;
+            left: 10%;
         }
 
+        /* Subtle Purple Right Glow */
         body::after {
+            width: 450px;
+            height: 450px;
+            filter: blur(100px);
+            opacity: 0.12;
             background: radial-gradient(circle, #a855f7 0%, transparent 70%);
             bottom: 15%;
-            right: 15%;
+            right: 10%;
         }
 
-        /* Glassmorphic Container designed to fluidly change dimensions */
+        /* Dynamic Cyan/Blue Light Texture Spotlight Overlay */
+        .bg-glow-layer {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70vw;
+            height: 70vh;
+            filter: blur(140px);
+            opacity: 0.08;
+            background: radial-gradient(circle, #06b6d4 0%, #3b82f6 40%, transparent 70%);
+            border-radius: 0;
+        }
+
+        /* Glassmorphic Container */
         .widget-container {
             position: relative;
             z-index: 1;
-            background: rgba(18, 19, 26, 0.8);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(18, 19, 26, 0.82);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 24px;
             padding: 32px;
             width: 100%;
@@ -65,8 +91,8 @@
             color: #f4f4f5;
             box-shadow: 
                 0 30px 60px rgba(0, 0, 0, 0.6),
-                0 0 60px rgba(59, 130, 246, 0.06),
-                0 0 60px rgba(168, 85, 247, 0.04);
+                0 0 60px rgba(59, 130, 246, 0.08),
+                0 0 60px rgba(6, 182, 212, 0.04);
             transition: max-width 0.3s ease, padding 0.3s ease;
         }
 
@@ -105,7 +131,7 @@
             font-size: 16px;
         }
 
-        /* Responsive Flow Core: Dynamic row-to-column layout switch */
+        /* Dynamic row-to-column layout switch */
         .conversion-flow {
             display: flex;
             flex-direction: row;
@@ -230,29 +256,25 @@
             font-weight: 700;
         }
 
-        /* Responsive Media Query Breakpoint (Tablet & Mobile devices) */
+        /* Responsive Media Query Breakpoint */
         @media (max-width: 580px) {
             body {
                 padding: 12px;
             }
             
-            body::before, body::after {
-                width: 260px;
-                height: 260px;
-            }
+            body::before { width: 300px; height: 300px; }
+            body::after { width: 280px; height: 280px; }
 
             .widget-container {
                 max-width: 420px;
                 padding: 24px;
             }
 
-            /* Switches layout layout to a single stacked mobile column */
             .conversion-flow {
                 flex-direction: column;
                 gap: 12px;
             }
 
-            /* Rotates the pointer downward for natural vertical process flow direction */
             .flow-divider {
                 transform: rotate(90deg);
                 margin: 2px 0;
@@ -274,6 +296,8 @@
     </style>
 </head>
 <body>
+
+<div class="bg-glow-layer"></div>
 
 <div class="widget-container">
     <select id="category" class="category-select" onchange="setupCategory()">
@@ -327,7 +351,7 @@
         area: {
             units: ["Square Meter", "Square Kilometer", "Square Mile", "Square Yard", "Square Foot", "Square Inch", "Hectare", "Acre", "Guntha"],
             base: "Square Meter",
-            factors: { "Square Meter": 1, "Square Kilometer": 1000000, "Square Mile": 2589988.11, "Square Yard": 0.836127, "Square Foot": 0.092903, "Square Inch": 0.00064516, "Hectare": 10000, "Acre": 4046.85642, "Guntha": 101.1714105 } // 1 Acre = 40 Guntha, so 1 Guntha = 4046.85642 / 40
+            factors: { "Square Meter": 1, "Square Kilometer": 1000000, "Square Mile": 2589988.11, "Square Yard": 0.836127, "Square Foot": 0.092903, "Square Inch": 0.00064516, "Hectare": 10000, "Acre": 4046.85642, "Guntha": 101.1714105 }
         },
         dataTransfer: {
             units: ["Bit per second", "Kilobit per second", "Kilobyte per second", "Kibibit per second", "Megabit per second", "Megabyte per second", "Mebibit per second", "Gigabit per second", "Gigabyte per second", "Gibibit per second", "Terabit per second", "Terabyte per second", "Tebibit per second"],
