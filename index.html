@@ -61,7 +61,7 @@
             border-radius: 24px;
             padding: 32px;
             width: 100%;
-            max-width: 650px; /* Expands nicely on desktop */
+            max-width: 650px;
             color: #f4f4f5;
             box-shadow: 
                 0 30px 60px rgba(0, 0, 0, 0.6),
@@ -108,7 +108,7 @@
         /* Responsive Flow Core: Dynamic row-to-column layout switch */
         .conversion-flow {
             display: flex;
-            flex-direction: row; /* Default: Side-by-side desktop layout */
+            flex-direction: row;
             align-items: center;
             gap: 16px;
             margin-bottom: 24px;
@@ -302,7 +302,7 @@
         <div class="flow-divider" id="flowSign">➔</div>
 
         <div class="input-box">
-            <input type="number" id="inputRight" value="2.54" step="any" oninput="performCalculation(false)">
+            <input type="number" id="inputRight" value="40" step="any" oninput="performCalculation(false)">
             <select id="unitRight" onchange="performCalculation(true)"></select>
         </div>
     </div>
@@ -325,9 +325,9 @@
             factors: { "Metre": 1, "Kilometre": 1000, "Centimetre": 0.01, "Millimetre": 0.001, "Micrometre": 0.000001, "Nanometre": 0.000000001, "Mile": 1609.344, "Yard": 0.9144, "Foot": 0.3048, "Inch": 0.0254, "Nautical mile": 1852 }
         },
         area: {
-            units: ["Square Meter", "Square Kilometer", "Square Mile", "Square Yard", "Square Foot", "Square Inch", "Hectare", "Acre"],
+            units: ["Square Meter", "Square Kilometer", "Square Mile", "Square Yard", "Square Foot", "Square Inch", "Hectare", "Acre", "Guntha"],
             base: "Square Meter",
-            factors: { "Square Meter": 1, "Square Kilometer": 1000000, "Square Mile": 2589988.11, "Square Yard": 0.836127, "Square Foot": 0.092903, "Square Inch": 0.00064516, "Hectare": 10000, "Acre": 4046.86 }
+            factors: { "Square Meter": 1, "Square Kilometer": 1000000, "Square Mile": 2589988.11, "Square Yard": 0.836127, "Square Foot": 0.092903, "Square Inch": 0.00064516, "Hectare": 10000, "Acre": 4046.85642, "Guntha": 101.1714105 } // 1 Acre = 40 Guntha, so 1 Guntha = 4046.85642 / 40
         },
         dataTransfer: {
             units: ["Bit per second", "Kilobit per second", "Kilobyte per second", "Kibibit per second", "Megabit per second", "Megabyte per second", "Mebibit per second", "Gigabit per second", "Gigabyte per second", "Gibibit per second", "Terabit per second", "Terabyte per second", "Tebibit per second"],
@@ -390,7 +390,6 @@
         }
     };
 
-    // Updates logic specifically to control text representation adjustments depending on screen layout width configurations
     function handleResponsiveSigns() {
         const divider = document.getElementById('flowSign');
         if (window.innerWidth <= 580) {
@@ -423,15 +422,23 @@
             if (catKey === "length") {
                 if (unit === "Inch") optL.selected = true;
                 if (unit === "Centimetre") optR.selected = true;
+                document.getElementById('inputLeft').value = 1;
+            } else if (catKey === "area") {
+                if (unit === "Acre") optL.selected = true;
+                if (unit === "Guntha") optR.selected = true;
+                document.getElementById('inputLeft').value = 1;
             } else if (catKey === "time") {
                 if (unit === "Calendar year") optL.selected = true;
                 if (unit === "Nanosecond") optR.selected = true;
+                document.getElementById('inputLeft').value = 1;
             } else if (catKey === "fuelEconomy") {
                 if (unit === "Kilometer per liter") optL.selected = true;
                 if (unit === "Mile per US gallon") optR.selected = true;
+                document.getElementById('inputLeft').value = 1;
             } else if (catKey === "volume") {
                 if (unit === "Litre") optL.selected = true;
                 if (unit === "Milliliter") optR.selected = true;
+                document.getElementById('inputLeft').value = 1;
             } else if (idx === 0) {
                 optL.selected = true;
             } else if (idx === 1) {
@@ -439,7 +446,6 @@
             }
         });
 
-        document.getElementById('inputLeft').value = 1;
         performCalculation(true);
     }
 
@@ -499,7 +505,7 @@
     }
 
     function convertFuelEconomy(val, from, to) {
-        if (from === hook) return val;
+        if (from === to) return val;
         if (val === 0) return 0;
         
         let mpgUS;
