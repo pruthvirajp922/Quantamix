@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Premium Modern Unit Converter</title>
     <style>
         * {
@@ -10,42 +10,73 @@
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
             margin: 0;
             padding: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: #0b0b0f;
-            background-image: 
-                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.12) 0, transparent 45%),
-                radial-gradient(at 100% 100%, rgba(147, 51, 234, 0.08) 0, transparent 45%);
+            background-color: #0d0e12;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 24px;
+            padding: 16px;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        /* Glassmorphic Minimalist Card Container */
+        /* Modern Tech Aura Background Lights mimicking your logo gradient */
+        body::before, body::after {
+            content: "";
+            position: absolute;
+            width: 450px;
+            height: 450px;
+            border-radius: 50%;
+            mix-blend-mode: screen;
+            filter: blur(90px);
+            opacity: 0.15;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::before {
+            background: radial-gradient(circle, #3b82f6 0%, transparent 70%);
+            top: 15%;
+            left: 15%;
+        }
+
+        body::after {
+            background: radial-gradient(circle, #a855f7 0%, transparent 70%);
+            bottom: 15%;
+            right: 15%;
+        }
+
+        /* Glassmorphic Container designed to fluidly change dimensions */
         .widget-container {
-            background: rgba(20, 20, 25, 0.8);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            position: relative;
+            z-index: 1;
+            background: rgba(18, 19, 26, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 24px;
-            padding: 36px;
+            padding: 32px;
             width: 100%;
-            max-width: 600px; 
+            max-width: 650px; /* Expands nicely on desktop */
             color: #f4f4f5;
-            box-shadow: 0 24px 48px rgba(0, 0, 0, 0.8), 
-                        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.6),
+                0 0 60px rgba(59, 130, 246, 0.06),
+                0 0 60px rgba(168, 85, 247, 0.04);
+            transition: max-width 0.3s ease, padding 0.3s ease;
         }
 
-        /* Custom Dropdown Control Menus - Small Font */
+        /* Interactive Dropdowns */
         select {
-            background-color: #16161a;
+            background-color: #16171f;
             color: #f4f4f5;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 12px;
-            padding: 14px 18px; 
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 15px 18px; 
             font-size: 15px; 
             font-weight: 500;
             cursor: pointer;
@@ -54,61 +85,52 @@
             appearance: none;
             background-image: url("data:image/svg+xml;utf8,<svg fill='%23a1a1aa' height='18' viewBox='0 0 24 24' width='18' xmlns='http://www.w3.org/2000/svg'><path d='M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z'/></svg>");
             background-repeat: no-repeat;
-            background-position: right 14px center;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            background-position: right 16px center;
+            transition: all 0.2s ease;
         }
 
-        select:hover {
-            border-color: rgba(255, 255, 255, 0.2);
-            background-color: #1c1c22;
-        }
-
-        select:focus {
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+        select:active, select:hover {
+            background-color: #1c1e28;
+            border-color: rgba(255, 255, 255, 0.15);
         }
 
         select option {
-            background-color: #0f0f12;
+            background-color: #0f1015;
             color: #f4f4f5;
-            padding: 12px;
         }
 
         .category-select {
-            margin-bottom: 28px;
-            font-size: 16px; 
-            letter-spacing: -0.1px;
+            margin-bottom: 24px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
         }
 
-        /* Conversion Input Segments Grid Layout */
-        .conversion-row {
+        /* Responsive Flow Core: Dynamic row-to-column layout switch */
+        .conversion-flow {
             display: flex;
+            flex-direction: row; /* Default: Side-by-side desktop layout */
             align-items: center;
             gap: 16px;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
+            width: 100%;
         }
 
         .input-box {
             flex: 1;
-            background: rgba(30, 30, 35, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.06);
+            width: 100%;
+            background: rgba(25, 27, 38, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             border-radius: 18px;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .input-box:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            background: rgba(30, 30, 35, 0.6);
+            transition: all 0.2s ease;
         }
 
         .input-box:focus-within {
             border-color: #3b82f6;
-            background: #121215;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+            background: #11121a;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
 
         .input-box input {
@@ -119,12 +141,11 @@
             font-size: 32px; 
             font-weight: 600;
             text-align: center;
-            padding: 20px 14px 6px 14px;
+            padding: 18px 14px 6px 14px;
             outline: none;
             letter-spacing: -0.5px;
         }
 
-        /* Hide HTML5 numeric spin buttons cleanly */
         .input-box input::-webkit-outer-spin-button,
         .input-box input::-webkit-inner-spin-button {
             -webkit-appearance: none;
@@ -136,91 +157,118 @@
 
         .input-box select {
             border: none;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
             border-radius: 0;
-            background-color: rgba(15, 15, 18, 0.6);
+            background-color: rgba(15, 16, 22, 0.6);
             font-size: 13px; 
             padding: 12px 14px;
             text-align-last: center;
             color: #a1a1aa;
         }
 
-        .input-box:focus-within select {
-            background-color: #0f0f12;
-            border-top-color: rgba(59, 130, 246, 0.2);
-            color: #d4d4d8;
-        }
-
-        .equals-sign {
-            font-size: 28px; 
-            color: #3f3f46;
+        /* Responsive Visual Divider Element */
+        .flow-divider {
+            font-size: 24px; 
+            color: rgba(255, 255, 255, 0.2);
             font-weight: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
         }
 
-        /* Premium Interactive Formula Display Element */
+        /* Formula Card Panel */
         .formula-section {
             font-size: 13px; 
             color: #a1a1aa;
             display: flex;
+            flex-direction: row;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             background-color: rgba(255, 255, 255, 0.01);
             padding: 14px 18px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            margin-bottom: 28px;
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            margin-bottom: 24px;
+            width: 100%;
         }
 
         .formula-tag {
-            background: linear-gradient(135deg, #fef08a 0%, #eab308 100%);
-            color: #0b0b0f;
+            background: linear-gradient(135deg, #a855f7 0%, #6366f1 100%);
+            color: #ffffff;
             font-weight: 700;
             padding: 3px 8px;
             border-radius: 6px;
             font-size: 11px; 
             text-transform: uppercase;
             letter-spacing: 0.5px;
+            flex-shrink: 0;
         }
 
         #formula-text {
             color: #d4d4d8;
             font-weight: 400;
+            line-height: 1.4;
         }
 
-        /* Modern Author Footer Credit Line - Big Font Focus */
+        /* Large Font Focus Credit Footer */
         .credit-footer {
             text-align: center;
             font-size: 24px; 
             color: #e4e4e7;
             font-weight: 500;
             letter-spacing: -0.2px;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
             padding-top: 24px;
-            margin-top: 8px;
+            transition: font-size 0.3s ease;
         }
 
         .credit-footer span {
-            background: linear-gradient(135deg, #c084fc 0%, #6366f1 100%);
+            background: linear-gradient(135deg, #3b82f6 0%, #a855f7 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             font-weight: 700;
         }
 
-        @media (max-width: 560px) {
-            .conversion-row {
+        /* Responsive Media Query Breakpoint (Tablet & Mobile devices) */
+        @media (max-width: 580px) {
+            body {
+                padding: 12px;
+            }
+            
+            body::before, body::after {
+                width: 260px;
+                height: 260px;
+            }
+
+            .widget-container {
+                max-width: 420px;
+                padding: 24px;
+            }
+
+            /* Switches layout layout to a single stacked mobile column */
+            .conversion-flow {
                 flex-direction: column;
                 gap: 12px;
             }
-            .equals-sign {
+
+            /* Rotates the pointer downward for natural vertical process flow direction */
+            .flow-divider {
                 transform: rotate(90deg);
-                margin: -2px 0;
-                font-size: 24px;
+                margin: 2px 0;
+                font-size: 20px;
             }
-            .input-box {
-                width: 100%;
+
+            .formula-section {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+                padding: 14px;
             }
+
             .credit-footer {
                 font-size: 20px;
+                padding-top: 20px;
             }
         }
     </style>
@@ -245,13 +293,13 @@
         <option value="volume">Volume</option>
     </select>
 
-    <div class="conversion-row">
+    <div class="conversion-flow">
         <div class="input-box">
             <input type="number" id="inputLeft" value="1" step="any" oninput="performCalculation(true)">
             <select id="unitLeft" onchange="performCalculation(true)"></select>
         </div>
 
-        <div class="equals-sign">=</div>
+        <div class="flow-divider" id="flowSign">➔</div>
 
         <div class="input-box">
             <input type="number" id="inputRight" value="2.54" step="any" oninput="performCalculation(false)">
@@ -270,7 +318,6 @@
 </div>
 
 <script>
-    // Universal Structural Multi-Unit Mapping Matrix
     const conversionData = {
         length: {
             units: ["Kilometre", "Metre", "Centimetre", "Millimetre", "Micrometre", "Nanometre", "Mile", "Yard", "Foot", "Inch", "Nautical mile"],
@@ -283,28 +330,14 @@
             factors: { "Square Meter": 1, "Square Kilometer": 1000000, "Square Mile": 2589988.11, "Square Yard": 0.836127, "Square Foot": 0.092903, "Square Inch": 0.00064516, "Hectare": 10000, "Acre": 4046.86 }
         },
         dataTransfer: {
-            units: [
-                "Bit per second", "Kilobit per second", "Kilobyte per second", "Kibibit per second", 
-                "Megabit per second", "Megabyte per second", "Mebibit per second", "Gigabit per second", 
-                "Gigabyte per second", "Gibibit per second", "Terabit per second", "Terabyte per second", "Tebibit per second"
-            ],
+            units: ["Bit per second", "Kilobit per second", "Kilobyte per second", "Kibibit per second", "Megabit per second", "Megabyte per second", "Mebibit per second", "Gigabit per second", "Gigabyte per second", "Gibibit per second", "Terabit per second", "Terabyte per second", "Tebibit per second"],
             base: "Bit per second",
-            factors: { 
-                "Bit per second": 1, "Kilobit per second": 1000, "Kilobyte per second": 8000, "Kibibit per second": 1024, 
-                "Megabit per second": 1000000, "Megabyte per second": 8000000, "Mebibit per second": 1048576, "Gigabit per second": 1000000000, 
-                "Gigabyte per second": 8000000000, "Gibibit per second": 1073741824, "Terabit per second": 1000000000000, "Terabyte per second": 8000000000000, "Tebibit per second": 1099511627776 
-            }
+            factors: { "Bit per second": 1, "Kilobit per second": 1000, "Kilobyte per second": 8000, "Kibibit per second": 1024, "Megabit per second": 1000000, "Megabyte per second": 8000000, "Mebibit per second": 1048576, "Gigabit per second": 1000000000, "Gigabyte per second": 8000000000, "Gibibit per second": 1073741824, "Terabit per second": 1000000000000, "Terabyte per second": 8000000000000, "Tebibit per second": 1099511627776 }
         },
         digitalStorage: {
-            units: [
-                "Bit", "Kilobit", "Kibibit", "Megabit", "Mebibit", "Gigabit", "Gibibit", "Terabit", "Tebibit", "Petabit", "Pebibit",
-                "Byte", "Kilobyte", "Kibibyte", "Megabyte", "Mebibyte", "Gigabyte", "Gibibyte", "Terabyte", "Tebibyte", "Petabyte", "Pebibyte"
-            ],
+            units: ["Bit", "Kilobit", "Kibibit", "Megabit", "Mebibit", "Gigabit", "Gibibit", "Terabit", "Tebibit", "Petabit", "Pebibit", "Byte", "Kilobyte", "Kibibyte", "Megabyte", "Mebibyte", "Gigabyte", "Gibibyte", "Terabyte", "Tebibyte", "Petabyte", "Pebibyte"],
             base: "Byte",
-            factors: { 
-                "Bit": 0.125, "Kilobit": 125, "Kibibit": 128, "Megabit": 125000, "Mebibit": 131072, "Gigabit": 125000000, "Gibibit": 134217728, "Terabit": 125000000000, "Tebibit": 137438953472, "Petabit": 125000000000000, "Pebibit": 140737488355328,
-                "Byte": 1, "Kilobyte": 1000, "Kibibyte": 1024, "Megabyte": 1000000, "Mebibyte": 1048576, "Gigabyte": 1000000000, "Gibibyte": 1073741824, "Terabyte": 1000000000000, "Tebibyte": 1099511627776, "Petabyte": 1000000000000000, "Pebibyte": 1125899906842624
-            }
+            factors: { "Bit": 0.125, "Kilobit": 125, "Kibibit": 128, "Megabit": 125000, "Mebibit": 131072, "Gigabit": 125000000, "Gibibit": 134217728, "Terabit": 125000000000, "Tebibit": 137438953472, "Petabit": 125000000000000, "Pebibit": 140737488355328, "Byte": 1, "Kilobyte": 1000, "Kibibyte": 1024, "Megabyte": 1000000, "Mebibyte": 1048576, "Gigabyte": 1000000000, "Gibibyte": 1073741824, "Terabyte": 1000000000000, "Tebibyte": 1099511627776, "Petabyte": 1000000000000000, "Pebibyte": 1125899906842624 }
         },
         energy: {
             units: ["Joule", "Kilojoule", "Gram calorie", "Kilocalorie", "Watt hour", "Kilowatt-hour", "Electronvolt", "British thermal unit", "US therm", "Foot-pound"],
@@ -351,21 +384,22 @@
             factors: { "Nanosecond": 1e-9, "Microsecond": 1e-6, "Millisecond": 0.001, "Second": 1, "Minute": 60, "Hour": 3600, "Day": 86400, "Week": 604800, "Month": 2628000, "Calendar year": 31536000, "Decade": 315360000, "Century": 3153600000 }
         },
         volume: {
-            units: [
-                "Kilolitre", "Hectolitre", "Decalitre", "Litre", "Decilitre", "Centilitre", "Milliliter",
-                "US liquid gallon", "US liquid quart", "US liquid pint", "US legal cup", "US fluid ounce", "US tablespoon", "US teaspoon", 
-                "Cubic meter", "Imperial gallon", "Imperial quart", "Imperial pint", "Imperial cup", 
-                "Imperial fluid ounce", "Imperial tablespoon", "Imperial teaspoon", "Cubic foot", "Cubic inch"
-            ],
+            units: ["Kilolitre", "Hectolitre", "Decalitre", "Litre", "Decilitre", "Centilitre", "Milliliter", "US liquid gallon", "US liquid quart", "US liquid pint", "US legal cup", "US fluid ounce", "US tablespoon", "US teaspoon", "Cubic meter", "Imperial gallon", "Imperial quart", "Imperial pint", "Imperial cup", "Imperial fluid ounce", "Imperial tablespoon", "Imperial teaspoon", "Cubic foot", "Cubic inch"],
             base: "Litre",
-            factors: { 
-                "Kilolitre": 1000, "Hectolitre": 100, "Decalitre": 10, "Litre": 1, "Decilitre": 0.1, "Centilitre": 0.01, "Milliliter": 0.001,
-                "US liquid gallon": 3.78541, "US liquid quart": 0.946353, "US liquid pint": 0.473176, "US legal cup": 0.24, "US fluid ounce": 0.0295735, "US tablespoon": 0.0147868, "US teaspoon": 0.00492892, 
-                "Cubic meter": 1000, "Imperial gallon": 4.54609, "Imperial quart": 1.13652, "Imperial pint": 0.568261, "Imperial cup": 0.284131, 
-                "Imperial fluid ounce": 0.0284131, "Imperial tablespoon": 0.0177582, "Imperial teaspoon": 0.00591939, "Cubic foot": 28.3168, "Cubic inch": 0.0163871
-            }
+            factors: { "Kilolitre": 1000, "Hectolitre": 100, "Decalitre": 10, "Litre": 1, "Decilitre": 0.1, "Centilitre": 0.01, "Milliliter": 0.001, "US liquid gallon": 3.78541, "US liquid quart": 0.946353, "US liquid pint": 0.473176, "US legal cup": 0.24, "US fluid ounce": 0.0295735, "US tablespoon": 0.0147868, "US teaspoon": 0.00492892, "Cubic meter": 1000, "Imperial gallon": 4.54609, "Imperial quart": 1.13652, "Imperial pint": 0.568261, "Imperial cup": 0.284131, "Imperial fluid ounce": 0.0284131, "Imperial tablespoon": 0.0177582, "Imperial teaspoon": 0.00591939, "Cubic foot": 28.3168, "Cubic inch": 0.0163871 }
         }
     };
+
+    // Updates logic specifically to control text representation adjustments depending on screen layout width configurations
+    function handleResponsiveSigns() {
+        const divider = document.getElementById('flowSign');
+        if (window.innerWidth <= 580) {
+            divider.innerText = "➔"; 
+        } else {
+            divider.innerText = "="; 
+        }
+    }
+    window.addEventListener('resize', handleResponsiveSigns);
 
     function setupCategory() {
         const catKey = document.getElementById('category').value;
@@ -465,7 +499,7 @@
     }
 
     function convertFuelEconomy(val, from, to) {
-        if (from === to) return val;
+        if (from === hook) return val;
         if (val === 0) return 0;
         
         let mpgUS;
@@ -501,7 +535,10 @@
         display.innerText = `multiply the ${catKey === "dataTransfer" ? "data rate" : catKey.toLowerCase()} value by ${formulaVal}`;
     }
 
-    window.onload = setupCategory;
+    window.onload = function() {
+        setupCategory();
+        handleResponsiveSigns();
+    };
 </script>
 
 </body>
