@@ -116,7 +116,7 @@
             background: transparent;
             border: none;
             color: #ffffff;
-            font-size: 32px; /* Smaller, cleaner input number font */
+            font-size: 32px; 
             font-weight: 600;
             text-align: center;
             padding: 20px 14px 6px 14px;
@@ -190,7 +190,7 @@
         /* Modern Author Footer Credit Line - Big Font Focus */
         .credit-footer {
             text-align: center;
-            font-size: 24px; /* Increased dramatically for emphasis */
+            font-size: 24px; 
             color: #e4e4e7;
             font-weight: 500;
             letter-spacing: -0.2px;
@@ -352,14 +352,16 @@
         },
         volume: {
             units: [
+                "Kilolitre", "Hectolitre", "Decalitre", "Litre", "Decilitre", "Centilitre", "Milliliter",
                 "US liquid gallon", "US liquid quart", "US liquid pint", "US legal cup", "US fluid ounce", "US tablespoon", "US teaspoon", 
-                "Cubic meter", "Litre", "Milliliter", "Imperial gallon", "Imperial quart", "Imperial pint", "Imperial cup", 
+                "Cubic meter", "Imperial gallon", "Imperial quart", "Imperial pint", "Imperial cup", 
                 "Imperial fluid ounce", "Imperial tablespoon", "Imperial teaspoon", "Cubic foot", "Cubic inch"
             ],
             base: "Litre",
             factors: { 
+                "Kilolitre": 1000, "Hectolitre": 100, "Decalitre": 10, "Litre": 1, "Decilitre": 0.1, "Centilitre": 0.01, "Milliliter": 0.001,
                 "US liquid gallon": 3.78541, "US liquid quart": 0.946353, "US liquid pint": 0.473176, "US legal cup": 0.24, "US fluid ounce": 0.0295735, "US tablespoon": 0.0147868, "US teaspoon": 0.00492892, 
-                "Cubic meter": 1000, "Litre": 1, "Milliliter": 0.001, "Imperial gallon": 4.54609, "Imperial quart": 1.13652, "Imperial pint": 0.568261, "Imperial cup": 0.284131, 
+                "Cubic meter": 1000, "Imperial gallon": 4.54609, "Imperial quart": 1.13652, "Imperial pint": 0.568261, "Imperial cup": 0.284131, 
                 "Imperial fluid ounce": 0.0284131, "Imperial tablespoon": 0.0177582, "Imperial teaspoon": 0.00591939, "Cubic foot": 28.3168, "Cubic inch": 0.0163871
             }
         }
@@ -393,6 +395,9 @@
             } else if (catKey === "fuelEconomy") {
                 if (unit === "Kilometer per liter") optL.selected = true;
                 if (unit === "Mile per US gallon") optR.selected = true;
+            } else if (catKey === "volume") {
+                if (unit === "Litre") optL.selected = true;
+                if (unit === "Milliliter") optR.selected = true;
             } else if (idx === 0) {
                 optL.selected = true;
             } else if (idx === 1) {
